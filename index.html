@@ -493,6 +493,9 @@ function submitFinal(type) {
 
   data.mode = type;
 
+  console.log("📦 Отправляем в Google Apps Script:");
+  console.table(data);
+
   fetch('https://script.google.com/macros/s/AKfycby2xNlk8A2Ha_RkCOo8gK9Ia_bnmmNN5UT12EqBKfc1WEgONN6bD2__xTf7ylUHeh9m/exec', {
     method: 'POST',
     body: new URLSearchParams(data),
@@ -500,12 +503,12 @@ function submitFinal(type) {
   })
   .then(response => response.text())
   .then(result => {
-    console.log("Ответ от сервера:", result);
+    console.log("✅ Ответ от Google Script:", result);
     showForm('success-block');
   })
   .catch(error => {
-    alert("Ошибка при отправке данных. Проверьте соединение или консоль.");
-    console.error("Ошибка:", error);
+    console.error("❌ Ошибка при отправке:", error);
+    alert("Произошла ошибка! Проверь консоль разработчика.");
   });
 }
 </script>
