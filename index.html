@@ -1,2 +1,96 @@
-<!-- Главная тестовая страница CRM -->
-<html><head><title>MY Master CRM</title></head><body><h1>CRM Loaded</h1></body></html>
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MY Master CRM</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f8f8f8;
+      color: #2a2a2a;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #e36227;
+    }
+    form {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+    label {
+      display: block;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      margin-top: 25px;
+      background: #e36227;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #c24f1f;
+    }
+  </style>
+</head>
+<body>
+  <h1>MY Master CRM — Добавить Юнит</h1>
+  <form onsubmit="submitUnitForm(event)">
+    <label>ID Юнита</label>
+    <input type="text" name="unit_id" required />
+    
+    <label>Категория</label>
+    <input type="text" name="category" required />
+
+    <label>Бренд</label>
+    <input type="text" name="brand" required />
+
+    <label>Модель</label>
+    <input type="text" name="model" required />
+
+    <label>Серийный номер</label>
+    <input type="text" name="serial" />
+
+    <label>Состояние</label>
+    <input type="text" name="condition" required />
+
+    <label>Цена закупки</label>
+    <input type="number" name="price" step="0.01" required />
+
+    <label>Ссылка на фото</label>
+    <input type="url" name="photo" />
+
+    <label>Дата добавления</label>
+    <input type="date" name="date" />
+
+    <label>Поломка</label>
+    <textarea name="issue" required></textarea>
+
+    <label>Комментарий</label>
+    <textarea name="comment"></textarea>
+
+    <button type="submit">Сохранить Юнит</button>
+  </form>
+
+  <script src="crm_script.js"></script>
+</body>
+</html>
