@@ -485,23 +485,28 @@ function submitFinal(type) {
   const inputs = form.querySelectorAll('input, select, textarea');
 
   const data = {};
-  inputs.forEach(el => {
-    const name = el.name || el.previousElementSibling?.innerText.toLowerCase().replace(/\s+/g, '_') || '';
-    data[name] = el.value;
+  inputs.forEach(input => {
+    if (input.name) {
+      data[input.name] = input.value;
+    }
   });
 
-  data.mode = isUnit ? 'unit' : 'part';
+  data.mode = type;
 
-  fetch("https://script.google.com/macros/s/AKfycby2xNlk8A2Ha_RkCOo8gK9Ia_bnmmNN5UT12EqBKfc1WEgONN6bD2__xTf7ylUHeh9m/exec", {
-    method: "POST",
-    mode: "no-cors",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: new URLSearchParams(data)
+  fetch('https://script.google.com/macros/s/AKfycby2xNlk8A2Ha_RkCOo8gK9Ia_bnmmNN5UT12EqBKfc1WEgONN6bD2__xTf7ylUHeh9m/exec', {
+    method: 'POST',
+    body: new URLSearchParams(data),
+    redirect: "follow"
+  })
+  .then(response => response.text())
+  .then(result => {
+    console.log("Ответ от сервера:", result);
+    showForm('success-block');
+  })
+  .catch(error => {
+    alert("Ошибка при отправке данных. Проверьте соединение или консоль.");
+    console.error("Ошибка:", error);
   });
-
-  showForm('success-block');
 }
 </script>
 
