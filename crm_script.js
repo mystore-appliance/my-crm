@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
         data.append("mode", "part");
       }
 
-      fetch("https://script.google.com/macros/s/AKfycby2xNlk8A2Ha_RkCOo8gK9Ia_bnmmNN5UT12EqBKfc1WEgONN6bD2__xTf7ylUHeh9m/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbzRHnbojRqEsuTwof7qJzyCZ731qHclLd6MRpgvnXZU8GPyVAXxrNR7PP___w1msk93hA/exec", {
         method: "POST",
         body: data
       })
