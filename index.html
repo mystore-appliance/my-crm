@@ -291,7 +291,7 @@
 <button onclick="showForm('stats-block')" style="background:#e36227;color:#fff;padding:10px 15px;border:none;margin:10px 5px;border-radius:6px;cursor:pointer;font-size:16px;">Посмотреть статистику</button>
 </div>
 </div>
-<script src="crm_script.js"></script>
+
 <div class="mobile-nav" style="display:none;">
 <button onclick="showForm('unit-form-block')" style="background:#e36227;color:#fff;padding:10px 15px;border:none;margin:10px 5px;border-radius:6px;cursor:pointer;font-size:16px;">Юнит</button>
 <button onclick="showForm('part-form-block')" style="background:#e36227;color:#fff;padding:10px 15px;border:none;margin:10px 5px;border-radius:6px;cursor:pointer;font-size:16px;">Деталь</button>
@@ -313,9 +313,85 @@
 </style>
 
 
-<script src="crm_script.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // === Автогенерация ID юнита ===
+  const unitIdInput = document.querySelector('#unit-form-block input[type="text"]');
+  let units = JSON.parse(localStorage.getItem('unitIds') || '[]');
+  if (unitIdInput && units.length >= 0) {
+    const nextUnitNumber = units.length + 1;
+    const newUnitId = 'U' + nextUnitNumber.toString().padStart(4, '0');
+    unitIdInput.value = newUnitId;
+  }
 
-<script src="crm_script.js"></script>
+  // === Сохраняем новый юнит в localStorage при сабмите ===
+  const unitForm = document.querySelector('#unit-form-block form');
+  unitForm.addEventListener('submit', function () {
+    const unitId = unitIdInput.value;
+    if (!units.includes(unitId)) {
+      units.push(unitId);
+      localStorage.setItem('unitIds', JSON.stringify(units));
+      localStorage.setItem(unitId + '_parts', JSON.stringify([]));
+    }
+  });
 
+  // === Выпадающий список ID юнитов в форме детали ===
+  const unitSelectContainer = document.querySelector('#part-form-block input[placeholder*="ID юнита"]')?.parentElement;
+  const manualInput = document.querySelector('#part-form-block input[placeholder*="ID юнита"]');
+  if (unitSelectContainer && manualInput) {
+    const select = document.createElement('select');
+    select.style = manualInput.style.cssText;
+    const opt = document.createElement('option');
+    opt.text = 'Выбрать из списка';
+    opt.disabled = true;
+    opt.selected = true;
+    select.appendChild(opt);
+
+    units.forEach(id => {
+      const o = document.createElement('option');
+      o.text = id;
+      o.value = id;
+      select.appendChild(o);
+    });
+
+    select.addEventListener('change', () => {
+      manualInput.value = select.value;
+      generateDetailId(select.value);
+    });
+
+    unitSelectContainer.insertBefore(select, manualInput);
+  }
+
+  // === Автогенерация ID детали ===
+  const detailIdInput = document.querySelector('#part-form-block input[placeholder*="ID детали"]');
+  const unitIdInputInPart = document.querySelector('#part-form-block input[placeholder*="ID юнита"]');
+
+  function generateDetailId(unitId) {
+    let parts = JSON.parse(localStorage.getItem(unitId + '_parts') || '[]');
+    const nextPart = parts.length + 1;
+    const newPartId = unitId + '-P' + nextPart.toString().padStart(3, '0');
+    if (detailIdInput) detailIdInput.value = newPartId;
+  }
+
+  // === При сабмите формы детали — сохраняем её ID ===
+  const partForm = document.querySelector('#part-form-block form');
+  partForm.addEventListener('submit', function () {
+    const unitId = unitIdInputInPart.value;
+    const partId = detailIdInput.value;
+    if (unitId && partId) {
+      let parts = JSON.parse(localStorage.getItem(unitId + '_parts') || '[]');
+      if (!parts.includes(partId)) {
+        parts.push(partId);
+        localStorage.setItem(unitId + '_parts', JSON.stringify(parts));
+      }
+    }
+  });
+});
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/gh/mystore-appliance/my-crm/crm_script_JSON_FINAL.js"></script>
+<iframe name="hidden_iframe" style="position:absolute;width:0;height:0;border:0;visibility:hidden;"></iframe>
 </body>
+
 </html>
